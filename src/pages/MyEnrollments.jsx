@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API_URL from "../services/api";
 import "./MyEnrollments.css";
 
 function MyEnrollments() {
@@ -17,7 +18,7 @@ function MyEnrollments() {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/enrollments/my-enrollments",
+                `${API_URL}/api/enrollments/my-enrollments`,
                 {
                     method: "GET",
                     headers: {

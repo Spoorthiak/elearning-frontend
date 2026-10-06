@@ -1,150 +1,85 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import API_URL from "../services/api";
 import "./TrainerDashboard.css";
 
-
 function TrainerDashboard() {
-
     const navigate = useNavigate();
-
-
-    // ==============================
-    // ACTIVE SECTION
-    // ==============================
 
     const [activeSection, setActiveSection] = useState("");
 
-
-    // ==============================
-    // COURSE STATES
-    // ==============================
-
     const [showForm, setShowForm] = useState(false);
-
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
 
-
-    // ==============================
-    // EDIT COURSE STATES
-    // ==============================
-
     const [showEditCourseForm, setShowEditCourseForm] =
         useState(false);
-
     const [editCourseId, setEditCourseId] =
         useState(null);
-
     const [editCourseTitle, setEditCourseTitle] =
         useState("");
-
     const [editCourseDescription, setEditCourseDescription] =
         useState("");
-
     const [editCoursePrice, setEditCoursePrice] =
         useState("");
-
     const [editCourseVisible, setEditCourseVisible] =
         useState(true);
 
-
-    // ==============================
-    // MY COURSES
-    // ==============================
-
     const [courses, setCourses] = useState([]);
-
     const [showCourses, setShowCourses] =
         useState(false);
 
-
-    // ==============================
-    // LESSON STATES
-    // ==============================
-
     const [showLessonForm, setShowLessonForm] =
         useState(false);
-
     const [selectedCourseId, setSelectedCourseId] =
         useState(null);
-
     const [lessonTitle, setLessonTitle] =
         useState("");
-
     const [lessonContent, setLessonContent] =
         useState("");
-
     const [lessonOrder, setLessonOrder] =
         useState("");
-
     const [lessonVideoUrl, setLessonVideoUrl] =
         useState("");
-
     const [lessons, setLessons] =
         useState({});
 
-
-    // ==============================
-    // EDIT LESSON STATES
-    // ==============================
-
     const [showEditLessonForm, setShowEditLessonForm] =
         useState(false);
-
     const [editLessonId, setEditLessonId] =
         useState(null);
-
     const [editLessonTitle, setEditLessonTitle] =
         useState("");
-
     const [editLessonContent, setEditLessonContent] =
         useState("");
-
     const [editLessonOrder, setEditLessonOrder] =
         useState("");
-
     const [editLessonVideoUrl, setEditLessonVideoUrl] =
         useState("");
 
-
-    // ==============================
-    // CREATE COURSE
-    // ==============================
-
     const handleCreateCourse = async (e) => {
-
         e.preventDefault();
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/courses",
+                `${API_URL}/api/courses`,
                 {
                     method: "POST",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`,
-
                         "Content-Type":
                             "application/json"
                     },
-
                     body: JSON.stringify({
-
                         title: title,
-
                         description: description,
-
                         price: Number(price),
-
                         visible: true
-
                     })
                 }
             );
@@ -153,7 +88,6 @@ function TrainerDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to create course"
@@ -167,13 +101,10 @@ function TrainerDashboard() {
             setTitle("");
             setDescription("");
             setPrice("");
-
             setShowForm(false);
-
             setActiveSection("");
 
         } catch (error) {
-
             console.error(
                 "Create course error:",
                 error
@@ -183,23 +114,15 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // FETCH MY COURSES
-    // ==============================
-
     const fetchMyCourses = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/courses/my-courses",
+                `${API_URL}/api/courses/my-courses`,
                 {
                     method: "GET",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -211,7 +134,6 @@ function TrainerDashboard() {
                 await response.text();
 
             if (!response.ok) {
-
                 throw new Error(
                     responseText ||
                     "Unable to fetch courses"
@@ -224,16 +146,13 @@ function TrainerDashboard() {
                     : [];
 
             setCourses(data);
-
             setShowCourses(true);
 
             for (const course of data) {
-
                 fetchLessons(course.id);
             }
 
         } catch (error) {
-
             console.error(
                 "My courses error:",
                 error
@@ -243,23 +162,15 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // FETCH LESSONS
-    // ==============================
-
     const fetchLessons = async (courseId) => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/courses/${courseId}/lessons`,
+                `${API_URL}/api/courses/${courseId}/lessons`,
                 {
                     method: "GET",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -271,7 +182,6 @@ function TrainerDashboard() {
                 await response.text();
 
             if (!response.ok) {
-
                 throw new Error(
                     responseText ||
                     "Unable to fetch lessons"
@@ -284,15 +194,11 @@ function TrainerDashboard() {
                     : [];
 
             setLessons((previous) => ({
-
                 ...previous,
-
                 [courseId]: data
-
             }));
 
         } catch (error) {
-
             console.error(
                 "Fetch lessons error:",
                 error
@@ -302,55 +208,30 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // OPEN CREATE COURSE
-    // ==============================
-
     const openCreateCourse = () => {
-
         setActiveSection(
             "create-course"
         );
 
         setShowForm(true);
-
         setShowCourses(false);
-
         setShowLessonForm(false);
-
         setShowEditLessonForm(false);
-
         setShowEditCourseForm(false);
     };
 
-
-    // ==============================
-    // OPEN MY COURSES
-    // ==============================
-
     const openMyCourses = async () => {
-
         setActiveSection("courses");
 
         setShowForm(false);
-
         setShowLessonForm(false);
-
         setShowEditLessonForm(false);
-
         setShowEditCourseForm(false);
 
         await fetchMyCourses();
     };
 
-
-    // ==============================
-    // OPEN ADD LESSON
-    // ==============================
-
     const openLessonForm = (courseId) => {
-
         setSelectedCourseId(courseId);
 
         setLessonTitle("");
@@ -359,54 +240,36 @@ function TrainerDashboard() {
         setLessonVideoUrl("");
 
         setShowLessonForm(true);
-
         setShowEditLessonForm(false);
-
         setShowEditCourseForm(false);
 
         setActiveSection("add-lesson");
     };
 
-
-    // ==============================
-    // CREATE LESSON
-    // ==============================
-
     const handleCreateLesson = async (e) => {
-
         e.preventDefault();
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/courses/${selectedCourseId}/lessons`,
+                `${API_URL}/api/courses/${selectedCourseId}/lessons`,
                 {
                     method: "POST",
-
                     headers: {
-
                         "Authorization":
                             `Bearer ${token}`,
-
                         "Content-Type":
                             "application/json"
                     },
-
                     body: JSON.stringify({
-
                         title: lessonTitle,
-
                         content: lessonContent,
-
                         lessonOrder:
                             Number(lessonOrder),
-
                         videoUrl:
                             lessonVideoUrl
-
                     })
                 }
             );
@@ -415,7 +278,6 @@ function TrainerDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to create lesson"
@@ -432,7 +294,6 @@ function TrainerDashboard() {
             setLessonVideoUrl("");
 
             setShowLessonForm(false);
-
             setActiveSection("courses");
 
             fetchLessons(
@@ -440,7 +301,6 @@ function TrainerDashboard() {
             );
 
         } catch (error) {
-
             console.error(
                 "Create lesson error:",
                 error
@@ -450,16 +310,10 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // OPEN EDIT LESSON
-    // ==============================
-
     const openEditLessonForm = (
         lesson,
         courseId
     ) => {
-
         setSelectedCourseId(courseId);
 
         setEditLessonId(
@@ -483,56 +337,38 @@ function TrainerDashboard() {
         );
 
         setShowEditLessonForm(true);
-
         setShowLessonForm(false);
-
         setShowEditCourseForm(false);
 
         setActiveSection("edit-lesson");
     };
 
-
-    // ==============================
-    // UPDATE LESSON
-    // ==============================
-
     const handleUpdateLesson = async (e) => {
-
         e.preventDefault();
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/courses/${selectedCourseId}/lessons/${editLessonId}`,
+                `${API_URL}/api/courses/${selectedCourseId}/lessons/${editLessonId}`,
                 {
                     method: "PUT",
-
                     headers: {
-
                         "Authorization":
                             `Bearer ${token}`,
-
                         "Content-Type":
                             "application/json"
                     },
-
                     body: JSON.stringify({
-
                         title:
                             editLessonTitle,
-
                         content:
                             editLessonContent,
-
                         lessonOrder:
                             Number(editLessonOrder),
-
                         videoUrl:
                             editLessonVideoUrl
-
                     })
                 }
             );
@@ -541,7 +377,6 @@ function TrainerDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to update lesson"
@@ -553,15 +388,10 @@ function TrainerDashboard() {
             );
 
             setShowEditLessonForm(false);
-
             setEditLessonId(null);
-
             setEditLessonTitle("");
-
             setEditLessonContent("");
-
             setEditLessonOrder("");
-
             setEditLessonVideoUrl("");
 
             setActiveSection("courses");
@@ -571,7 +401,6 @@ function TrainerDashboard() {
             );
 
         } catch (error) {
-
             console.error(
                 "Update lesson error:",
                 error
@@ -581,16 +410,10 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // DELETE LESSON
-    // ==============================
-
     const handleDeleteLesson = async (
         lessonId,
         courseId
     ) => {
-
         const confirmDelete =
             window.confirm(
                 "Are you sure you want to delete this lesson?"
@@ -601,17 +424,14 @@ function TrainerDashboard() {
         }
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/courses/${courseId}/lessons/${lessonId}`,
+                `${API_URL}/api/courses/${courseId}/lessons/${lessonId}`,
                 {
                     method: "DELETE",
-
                     headers: {
-
                         "Authorization":
                             `Bearer ${token}`
                     }
@@ -622,7 +442,6 @@ function TrainerDashboard() {
                 await response.text();
 
             if (!response.ok) {
-
                 throw new Error(
                     data ||
                     "Unable to delete lesson"
@@ -634,7 +453,6 @@ function TrainerDashboard() {
             fetchLessons(courseId);
 
         } catch (error) {
-
             console.error(
                 "Delete lesson error:",
                 error
@@ -644,15 +462,9 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // OPEN EDIT COURSE
-    // ==============================
-
     const openEditCourseForm = (
         course
     ) => {
-
         setEditCourseId(
             course.id
         );
@@ -674,11 +486,8 @@ function TrainerDashboard() {
         );
 
         setShowEditCourseForm(true);
-
         setShowForm(false);
-
         setShowLessonForm(false);
-
         setShowEditLessonForm(false);
 
         setActiveSection(
@@ -686,48 +495,32 @@ function TrainerDashboard() {
         );
     };
 
-
-    // ==============================
-    // UPDATE COURSE
-    // ==============================
-
     const handleUpdateCourse = async (e) => {
-
         e.preventDefault();
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/courses/${editCourseId}`,
+                `${API_URL}/api/courses/${editCourseId}`,
                 {
                     method: "PUT",
-
                     headers: {
-
                         "Authorization":
                             `Bearer ${token}`,
-
                         "Content-Type":
                             "application/json"
                     },
-
                     body: JSON.stringify({
-
                         title:
                             editCourseTitle,
-
                         description:
                             editCourseDescription,
-
                         price:
                             Number(editCoursePrice),
-
                         visible:
                             editCourseVisible
-
                     })
                 }
             );
@@ -736,7 +529,6 @@ function TrainerDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to update course"
@@ -748,15 +540,10 @@ function TrainerDashboard() {
             );
 
             setShowEditCourseForm(false);
-
             setEditCourseId(null);
-
             setEditCourseTitle("");
-
             setEditCourseDescription("");
-
             setEditCoursePrice("");
-
             setEditCourseVisible(true);
 
             setActiveSection("courses");
@@ -764,7 +551,6 @@ function TrainerDashboard() {
             fetchMyCourses();
 
         } catch (error) {
-
             console.error(
                 "Update course error:",
                 error
@@ -774,13 +560,7 @@ function TrainerDashboard() {
         }
     };
 
-
-    // ==============================
-    // LOGOUT
-    // ==============================
-
     const handleLogout = () => {
-
         localStorage.removeItem(
             "token"
         );
@@ -792,15 +572,8 @@ function TrainerDashboard() {
         navigate("/login");
     };
 
-
     return (
-
         <div className="trainer-dashboard">
-
-
-            {/* ==========================
-                HEADER
-            =========================== */}
 
             <section className="trainer-header">
 
@@ -827,11 +600,6 @@ function TrainerDashboard() {
 
             </section>
 
-
-            {/* ==========================
-                MAIN ACTIONS
-            =========================== */}
-
             <div className="trainer-actions">
 
                 <button
@@ -841,14 +609,12 @@ function TrainerDashboard() {
                     ➕ Create Course
                 </button>
 
-
                 <button
                     className="trainer-action-btn my-courses-btn"
                     onClick={openMyCourses}
                 >
                     📚 My Courses
                 </button>
-
 
                 <button
                     className="trainer-action-btn"
@@ -858,11 +624,6 @@ function TrainerDashboard() {
                 </button>
 
             </div>
-
-
-            {/* ==========================
-                CREATE COURSE
-            =========================== */}
 
             {activeSection === "create-course" &&
                 showForm && (
@@ -896,7 +657,6 @@ function TrainerDashboard() {
 
                         </div>
 
-
                         <div className="trainer-form-group">
 
                             <label>
@@ -914,7 +674,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
 
                         <div className="trainer-form-group">
 
@@ -934,7 +693,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
 
                         <div className="form-buttons">
 
@@ -963,11 +721,6 @@ function TrainerDashboard() {
                 </div>
 
             )}
-
-
-            {/* ==========================
-                EDIT COURSE
-            =========================== */}
 
             {activeSection === "edit-course" &&
                 showEditCourseForm && (
@@ -1001,7 +754,6 @@ function TrainerDashboard() {
 
                         </div>
 
-
                         <div className="trainer-form-group">
 
                             <label>
@@ -1022,7 +774,6 @@ function TrainerDashboard() {
 
                         </div>
 
-
                         <div className="trainer-form-group">
 
                             <label>
@@ -1041,7 +792,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
 
                         <div className="trainer-form-group">
 
@@ -1075,7 +825,6 @@ function TrainerDashboard() {
 
                         </div>
 
-
                         <div className="form-buttons">
 
                             <button
@@ -1104,11 +853,6 @@ function TrainerDashboard() {
 
             )}
 
-
-            {/* ==========================
-                ADD LESSON
-            =========================== */}
-
             {activeSection === "add-lesson" &&
                 showLessonForm && (
 
@@ -1121,7 +865,6 @@ function TrainerDashboard() {
                     <p>
                         Course ID: {selectedCourseId}
                     </p>
-
 
                     <form
                         onSubmit={handleCreateLesson}
@@ -1146,7 +889,6 @@ function TrainerDashboard() {
 
                         </div>
 
-
                         <div className="trainer-form-group">
 
                             <label>
@@ -1164,7 +906,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
 
                         <div className="trainer-form-group">
 
@@ -1184,11 +925,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
-
-                        {/* ==========================
-                            VIDEO URL
-                        =========================== */}
 
                         <div className="trainer-form-group">
 
@@ -1213,7 +949,6 @@ function TrainerDashboard() {
                             </small>
 
                         </div>
-
 
                         <div className="form-buttons">
 
@@ -1243,11 +978,6 @@ function TrainerDashboard() {
 
             )}
 
-
-            {/* ==========================
-                EDIT LESSON
-            =========================== */}
-
             {activeSection === "edit-lesson" &&
                 showEditLessonForm && (
 
@@ -1256,7 +986,6 @@ function TrainerDashboard() {
                     <h2>
                         ✏️ Edit Lesson
                     </h2>
-
 
                     <form
                         onSubmit={handleUpdateLesson}
@@ -1281,7 +1010,6 @@ function TrainerDashboard() {
 
                         </div>
 
-
                         <div className="trainer-form-group">
 
                             <label>
@@ -1299,7 +1027,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
 
                         <div className="trainer-form-group">
 
@@ -1319,11 +1046,6 @@ function TrainerDashboard() {
                             />
 
                         </div>
-
-
-                        {/* ==========================
-                            EDIT VIDEO URL
-                        =========================== */}
 
                         <div className="trainer-form-group">
 
@@ -1350,7 +1072,6 @@ function TrainerDashboard() {
                             </small>
 
                         </div>
-
 
                         <div className="form-buttons">
 
@@ -1380,11 +1101,6 @@ function TrainerDashboard() {
 
             )}
 
-
-            {/* ==========================
-                MY COURSES
-            =========================== */}
-
             {activeSection === "courses" &&
                 showCourses && (
 
@@ -1405,7 +1121,6 @@ function TrainerDashboard() {
                         </div>
 
                     </div>
-
 
                     {courses.length === 0 ? (
 
@@ -1453,16 +1168,13 @@ function TrainerDashboard() {
 
                                     </div>
 
-
                                     <h3>
                                         {course.title}
                                     </h3>
 
-
                                     <p>
                                         {course.description}
                                     </p>
-
 
                                     <div className="course-meta">
 
@@ -1478,7 +1190,6 @@ function TrainerDashboard() {
 
                                     </div>
 
-
                                     <div className="course-actions">
 
                                         <button
@@ -1491,7 +1202,6 @@ function TrainerDashboard() {
                                         >
                                             ✏️ Edit Course
                                         </button>
-
 
                                         <button
                                             className="course-action-btn add-lesson-btn"
@@ -1506,15 +1216,11 @@ function TrainerDashboard() {
 
                                     </div>
 
-
-                                    {/* LESSONS */}
-
                                     <div className="lessons-section">
 
                                         <h4>
                                             📚 Lessons
                                         </h4>
-
 
                                         {!lessons[course.id] ||
                                         lessons[course.id].length === 0 ? (
@@ -1561,7 +1267,6 @@ function TrainerDashboard() {
 
                                                         </div>
 
-
                                                         <div className="lesson-actions">
 
                                                             <button
@@ -1575,7 +1280,6 @@ function TrainerDashboard() {
                                                             >
                                                                 ✏️ Edit
                                                             </button>
-
 
                                                             <button
                                                                 className="delete-lesson-btn"
@@ -1615,6 +1319,5 @@ function TrainerDashboard() {
         </div>
     );
 }
-
 
 export default TrainerDashboard;

@@ -1,32 +1,21 @@
 import { useState } from "react";
+import API_URL from "../services/api";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
 
-    // =========================
-    // STATES
-    // =========================
-
     const [users, setUsers] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState({});
-
     const [courses, setCourses] = useState([]);
-
     const [trainers, setTrainers] = useState([]);
 
     const [showTrainerForm, setShowTrainerForm] = useState(false);
-
     const [trainerUsername, setTrainerUsername] = useState("");
     const [trainerPassword, setTrainerPassword] = useState("");
 
-    // Controls which section is displayed
     const [activeSection, setActiveSection] = useState("");
 
-
-    // =========================
     // FETCH USERS
-    // =========================
-
     const fetchUsers = async () => {
 
         try {
@@ -35,10 +24,9 @@ function AdminDashboard() {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/admin/users",
+                `${API_URL}/api/admin/users`,
                 {
                     method: "GET",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -50,7 +38,6 @@ function AdminDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to fetch users"
@@ -70,11 +57,7 @@ function AdminDashboard() {
         }
     };
 
-
-    // =========================
     // UPDATE USER ROLE
-    // =========================
-
     const updateRole = async (userId) => {
 
         try {
@@ -95,10 +78,9 @@ function AdminDashboard() {
             }
 
             const response = await fetch(
-                `http://localhost:8080/api/admin/users/${userId}/role?role=${encodeURIComponent(role)}`,
+                `${API_URL}/api/admin/users/${userId}/role?role=${encodeURIComponent(role)}`,
                 {
                     method: "PUT",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -110,7 +92,6 @@ function AdminDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to update role"
@@ -134,11 +115,7 @@ function AdminDashboard() {
         }
     };
 
-
-    // =========================
     // FETCH COURSES
-    // =========================
-
     const fetchCourses = async () => {
 
         try {
@@ -147,10 +124,9 @@ function AdminDashboard() {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/courses",
+                `${API_URL}/api/courses`,
                 {
                     method: "GET",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -162,7 +138,6 @@ function AdminDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to fetch courses"
@@ -182,11 +157,7 @@ function AdminDashboard() {
         }
     };
 
-
-    // =========================
     // UPDATE COURSE VISIBILITY
-    // =========================
-
     const updateCourseVisibility = async (
         courseId,
         visible
@@ -198,10 +169,9 @@ function AdminDashboard() {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/admin/courses/${courseId}/visibility?visible=${visible}`,
+                `${API_URL}/api/admin/courses/${courseId}/visibility?visible=${visible}`,
                 {
                     method: "PUT",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -213,7 +183,6 @@ function AdminDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to update course visibility"
@@ -239,11 +208,7 @@ function AdminDashboard() {
         }
     };
 
-
-    // =========================
     // FETCH TRAINERS
-    // =========================
-
     const fetchTrainers = async () => {
 
         try {
@@ -252,10 +217,9 @@ function AdminDashboard() {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/admin/users",
+                `${API_URL}/api/admin/users`,
                 {
                     method: "GET",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -267,7 +231,6 @@ function AdminDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to fetch trainers"
@@ -296,11 +259,7 @@ function AdminDashboard() {
         }
     };
 
-
-    // =========================
     // CREATE TRAINER
-    // =========================
-
     const handleCreateTrainer = async () => {
 
         if (
@@ -321,14 +280,13 @@ function AdminDashboard() {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/admin/trainers?username=${encodeURIComponent(
+                `${API_URL}/api/admin/trainers?username=${encodeURIComponent(
                     trainerUsername
                 )}&password=${encodeURIComponent(
                     trainerPassword
                 )}`,
                 {
                     method: "POST",
-
                     headers: {
                         "Authorization":
                             `Bearer ${token}`
@@ -340,7 +298,6 @@ function AdminDashboard() {
                 await response.json();
 
             if (!response.ok) {
-
                 throw new Error(
                     data.message ||
                     "Unable to create trainer"
@@ -353,9 +310,7 @@ function AdminDashboard() {
 
             setTrainerUsername("");
             setTrainerPassword("");
-
             setShowTrainerForm(false);
-
             setActiveSection("");
 
         } catch (error) {
@@ -369,53 +324,34 @@ function AdminDashboard() {
         }
     };
 
-
-    // =========================
     // OPEN USERS
-    // =========================
-
     const openUsers = async () => {
 
         setActiveSection("users");
-
         setShowTrainerForm(false);
 
         await fetchUsers();
     };
 
-
-    // =========================
     // OPEN COURSES
-    // =========================
-
     const openCourses = async () => {
 
         setActiveSection("courses");
-
         setShowTrainerForm(false);
 
         await fetchCourses();
     };
 
-
-    // =========================
     // OPEN TRAINERS
-    // =========================
-
     const openTrainers = async () => {
 
         setActiveSection("trainers");
-
         setShowTrainerForm(false);
 
         await fetchTrainers();
     };
 
-
-    // =========================
     // OPEN CREATE TRAINER
-    // =========================
-
     const openCreateTrainer = () => {
 
         setActiveSection(
@@ -425,18 +361,10 @@ function AdminDashboard() {
         setShowTrainerForm(true);
     };
 
-
-    // =========================
-    // RENDER
-    // =========================
-
     return (
-
         <div className="admin-dashboard">
 
-            {/* =========================
-                HEADER
-            ========================= */}
+            {/* HEADER */}
 
             <section className="admin-header">
 
@@ -457,17 +385,13 @@ function AdminDashboard() {
 
                 </div>
 
-
                 <div className="admin-header-icon">
                     🛡️
                 </div>
 
             </section>
 
-
-            {/* =========================
-                MAIN ACTION BUTTONS
-            ========================= */}
+            {/* MAIN ACTION BUTTONS */}
 
             <div className="admin-actions">
 
@@ -478,7 +402,6 @@ function AdminDashboard() {
                     👥 View Users
                 </button>
 
-
                 <button
                     className="admin-action-btn courses-btn"
                     onClick={openCourses}
@@ -486,14 +409,12 @@ function AdminDashboard() {
                     📚 View Courses
                 </button>
 
-
                 <button
                     className="admin-action-btn trainers-btn"
                     onClick={openTrainers}
                 >
                     👨‍🏫 View Trainers
                 </button>
-
 
                 <button
                     className="admin-action-btn create-trainer-btn"
@@ -504,10 +425,7 @@ function AdminDashboard() {
 
             </div>
 
-
-            {/* =====================================================
-                CREATE TRAINER
-            ===================================================== */}
+            {/* CREATE TRAINER */}
 
             {activeSection === "create-trainer" &&
                 showTrainerForm && (
@@ -519,7 +437,6 @@ function AdminDashboard() {
                             <div className="admin-form-icon">
                                 👨‍🏫
                             </div>
-
 
                             <div>
 
@@ -535,9 +452,6 @@ function AdminDashboard() {
 
                         </div>
 
-
-                        {/* USERNAME */}
-
                         <div className="admin-form-group">
 
                             <label>
@@ -546,9 +460,7 @@ function AdminDashboard() {
 
                             <input
                                 type="text"
-                                value={
-                                    trainerUsername
-                                }
+                                value={trainerUsername}
                                 onChange={(e) =>
                                     setTrainerUsername(
                                         e.target.value
@@ -559,9 +471,6 @@ function AdminDashboard() {
 
                         </div>
 
-
-                        {/* PASSWORD */}
-
                         <div className="admin-form-group">
 
                             <label>
@@ -570,9 +479,7 @@ function AdminDashboard() {
 
                             <input
                                 type="password"
-                                value={
-                                    trainerPassword
-                                }
+                                value={trainerPassword}
                                 onChange={(e) =>
                                     setTrainerPassword(
                                         e.target.value
@@ -582,9 +489,6 @@ function AdminDashboard() {
                             />
 
                         </div>
-
-
-                        {/* BUTTONS */}
 
                         <div className="admin-form-buttons">
 
@@ -596,7 +500,6 @@ function AdminDashboard() {
                             >
                                 Create Trainer
                             </button>
-
 
                             <button
                                 className="admin-cancel-btn"
@@ -617,7 +520,6 @@ function AdminDashboard() {
                                     setTrainerPassword(
                                         ""
                                     );
-
                                 }}
                             >
                                 Cancel
@@ -626,13 +528,9 @@ function AdminDashboard() {
                         </div>
 
                     </div>
-
                 )}
 
-
-            {/* =====================================================
-                USERS
-            ===================================================== */}
+            {/* USERS */}
 
             {activeSection === "users" &&
                 users.length > 0 && (
@@ -644,7 +542,6 @@ function AdminDashboard() {
                             <div className="section-heading-icon">
                                 👥
                             </div>
-
 
                             <div>
 
@@ -659,7 +556,6 @@ function AdminDashboard() {
                             </div>
 
                         </div>
-
 
                         <div className="users-grid">
 
@@ -676,7 +572,6 @@ function AdminDashboard() {
                                             <div className="user-avatar">
                                                 👤
                                             </div>
-
 
                                             <span
                                                 className={`role-badge ${
@@ -697,26 +592,19 @@ function AdminDashboard() {
 
                                         </div>
 
-
                                         <h3>
-                                            {
-                                                user.username
-                                            }
+                                            {user.username}
                                         </h3>
-
 
                                         <p className="user-role-text">
 
                                             Current Role:{" "}
 
                                             <strong>
-                                                {
-                                                    user.role
-                                                }
+                                                {user.role}
                                             </strong>
 
                                         </p>
-
 
                                         {user.role !==
                                             "ROLE_ADMIN" && (
@@ -735,8 +623,7 @@ function AdminDashboard() {
                                                             {
                                                                 ...selectedRoles,
                                                                 [user.id]:
-                                                                    e.target
-                                                                        .value
+                                                                    e.target.value
                                                             }
                                                         )
                                                     }
@@ -746,13 +633,11 @@ function AdminDashboard() {
                                                         Student
                                                     </option>
 
-
                                                     <option value="ROLE_TRAINER">
                                                         Trainer
                                                     </option>
 
                                                 </select>
-
 
                                                 <button
                                                     className="update-role-btn"
@@ -766,24 +651,18 @@ function AdminDashboard() {
                                                 </button>
 
                                             </div>
-
                                         )}
 
                                     </div>
-
                                 )
                             )}
 
                         </div>
 
                     </section>
-
                 )}
 
-
-            {/* =====================================================
-                COURSES
-            ===================================================== */}
+            {/* COURSES */}
 
             {activeSection === "courses" &&
                 courses.length > 0 && (
@@ -795,7 +674,6 @@ function AdminDashboard() {
                             <div className="section-heading-icon">
                                 📚
                             </div>
-
 
                             <div>
 
@@ -810,7 +688,6 @@ function AdminDashboard() {
                             </div>
 
                         </div>
-
 
                         <div className="admin-course-grid">
 
@@ -828,7 +705,6 @@ function AdminDashboard() {
                                                 📖
                                             </div>
 
-
                                             <span
                                                 className={`course-status ${
                                                     course.visible
@@ -843,20 +719,13 @@ function AdminDashboard() {
 
                                         </div>
 
-
                                         <h3>
-                                            {
-                                                course.title
-                                            }
+                                            {course.title}
                                         </h3>
 
-
                                         <p className="course-description">
-                                            {
-                                                course.description
-                                            }
+                                            {course.description}
                                         </p>
-
 
                                         <div className="course-details">
 
@@ -867,14 +736,10 @@ function AdminDashboard() {
                                                 </span>
 
                                                 <strong>
-                                                    ₹
-                                                    {
-                                                        course.price
-                                                    }
+                                                    ₹{course.price}
                                                 </strong>
 
                                             </div>
-
 
                                             <div>
 
@@ -883,15 +748,12 @@ function AdminDashboard() {
                                                 </span>
 
                                                 <strong>
-                                                    {
-                                                        course.trainerUsername
-                                                    }
+                                                    {course.trainerUsername}
                                                 </strong>
 
                                             </div>
 
                                         </div>
-
 
                                         <button
                                             className={`visibility-btn ${
@@ -912,20 +774,15 @@ function AdminDashboard() {
                                         </button>
 
                                     </div>
-
                                 )
                             )}
 
                         </div>
 
                     </section>
-
                 )}
 
-
-            {/* =====================================================
-                TRAINERS
-            ===================================================== */}
+            {/* TRAINERS */}
 
             {activeSection === "trainers" &&
                 trainers.length > 0 && (
@@ -937,7 +794,6 @@ function AdminDashboard() {
                             <div className="section-heading-icon">
                                 👨‍🏫
                             </div>
-
 
                             <div>
 
@@ -953,7 +809,6 @@ function AdminDashboard() {
 
                         </div>
 
-
                         <div className="trainers-grid">
 
                             {trainers.map(
@@ -968,15 +823,11 @@ function AdminDashboard() {
                                             👨‍🏫
                                         </div>
 
-
                                         <div className="trainer-info">
 
                                             <h3>
-                                                {
-                                                    trainer.username
-                                                }
+                                                {trainer.username}
                                             </h3>
-
 
                                             <span className="trainer-badge">
                                                 ROLE_TRAINER
@@ -985,20 +836,15 @@ function AdminDashboard() {
                                         </div>
 
                                     </div>
-
                                 )
                             )}
 
                         </div>
 
                     </section>
-
                 )}
 
-
-            {/* =====================================================
-                NO USERS MESSAGE
-            ===================================================== */}
+            {/* NO USERS MESSAGE */}
 
             {activeSection === "users" &&
                 users.length === 0 && (
@@ -1014,13 +860,9 @@ function AdminDashboard() {
                         </p>
 
                     </div>
-
                 )}
 
-
-            {/* =====================================================
-                NO COURSES MESSAGE
-            ===================================================== */}
+            {/* NO COURSES MESSAGE */}
 
             {activeSection === "courses" &&
                 courses.length === 0 && (
@@ -1036,13 +878,9 @@ function AdminDashboard() {
                         </p>
 
                     </div>
-
                 )}
 
-
-            {/* =====================================================
-                NO TRAINERS MESSAGE
-            ===================================================== */}
+            {/* NO TRAINERS MESSAGE */}
 
             {activeSection === "trainers" &&
                 trainers.length === 0 && (
@@ -1058,7 +896,6 @@ function AdminDashboard() {
                         </p>
 
                     </div>
-
                 )}
 
         </div>

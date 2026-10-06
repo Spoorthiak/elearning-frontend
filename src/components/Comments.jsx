@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API_URL from "../services/api";
 import "./Comments.css";
 
 function Comments({ courseId }) {
@@ -13,24 +14,27 @@ function Comments({ courseId }) {
         fetchComments();
     }, [courseId]);
 
-
+    // FETCH COMMENTS
     const fetchComments = async () => {
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/comments/course/${courseId}`,
+                `${API_URL}/api/comments/course/${courseId}`,
                 {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
-            const responseText = await response.text();
+            const responseText =
+                await response.text();
 
             if (!response.ok) {
                 throw new Error(
@@ -39,9 +43,10 @@ function Comments({ courseId }) {
                 );
             }
 
-            const data = responseText
-                ? JSON.parse(responseText)
-                : [];
+            const data =
+                responseText
+                    ? JSON.parse(responseText)
+                    : [];
 
             setComments(data);
 
@@ -56,14 +61,15 @@ function Comments({ courseId }) {
         }
     };
 
-
     // ADD COMMENT
     const addComment = async () => {
 
         if (!content.trim()) {
+
             setMessage(
                 "Please enter a comment."
             );
+
             return;
         }
 
@@ -73,7 +79,7 @@ function Comments({ courseId }) {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/comments/course/${courseId}`,
+                `${API_URL}/api/comments/course/${courseId}`,
                 {
                     method: "POST",
                     headers: {
@@ -115,7 +121,6 @@ function Comments({ courseId }) {
         }
     };
 
-
     // ADD REPLY
     const addReply = async (commentId) => {
 
@@ -137,7 +142,7 @@ function Comments({ courseId }) {
                 localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/comments/${commentId}/reply`,
+                `${API_URL}/api/comments/${commentId}/reply`,
                 {
                     method: "POST",
                     headers: {
@@ -182,7 +187,6 @@ function Comments({ courseId }) {
         }
     };
 
-
     return (
 
         <div className="comments-container">
@@ -210,7 +214,6 @@ function Comments({ courseId }) {
 
             </div>
 
-
             {/* MESSAGE */}
 
             {message && (
@@ -221,7 +224,6 @@ function Comments({ courseId }) {
 
             )}
 
-
             {error && (
 
                 <div className="comment-error">
@@ -229,7 +231,6 @@ function Comments({ courseId }) {
                 </div>
 
             )}
-
 
             {/* ADD COMMENT */}
 
@@ -243,7 +244,9 @@ function Comments({ courseId }) {
                     className="comment-textarea"
                     value={content}
                     onChange={(e) =>
-                        setContent(e.target.value)
+                        setContent(
+                            e.target.value
+                        )
                     }
                     placeholder="Share your thoughts or ask a question..."
                     rows="4"
@@ -265,7 +268,6 @@ function Comments({ courseId }) {
                 </div>
 
             </div>
-
 
             {/* COMMENTS */}
 
@@ -306,9 +308,11 @@ function Comments({ courseId }) {
                                 <div className="comment-user">
 
                                     <div className="user-avatar">
+
                                         {comment.username
                                             ?.charAt(0)
                                             ?.toUpperCase()}
+
                                     </div>
 
                                     <div>
@@ -327,13 +331,11 @@ function Comments({ courseId }) {
 
                             </div>
 
-
                             {/* COMMENT TEXT */}
 
                             <p className="comment-content">
                                 {comment.content}
                             </p>
-
 
                             {/* REPLY */}
 
@@ -370,7 +372,6 @@ function Comments({ courseId }) {
 
                             </div>
 
-
                             {/* REPLIES */}
 
                             {comment.replies &&
@@ -398,9 +399,11 @@ function Comments({ courseId }) {
                                                     <div className="reply-user">
 
                                                         <div className="reply-avatar">
+
                                                             {reply.username
                                                                 ?.charAt(0)
                                                                 ?.toUpperCase()}
+
                                                         </div>
 
                                                         <div>
@@ -428,14 +431,18 @@ function Comments({ courseId }) {
                                                     </p>
 
                                                 </div>
+
                                             )
                                         )}
 
                                     </div>
+
                                 )}
 
                         </div>
+
                     ))
+
                 )}
 
             </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API_URL from "../services/api";
 import "./Courses.css";
 
 function Courses() {
@@ -15,67 +16,90 @@ function Courses() {
     const fetchCourses = async () => {
 
         try {
-            const token = localStorage.getItem("token");
+
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:8080/api/courses/visible",
+                `${API_URL}/api/courses/visible`,
                 {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
             if (!response.ok) {
-                throw new Error("Unable to fetch courses");
+                throw new Error(
+                    "Unable to fetch courses"
+                );
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             setCourses(data);
 
         } catch (error) {
+
             setError(error.message);
+
         } finally {
+
             setLoading(false);
+
         }
     };
 
-
     const handleEnroll = async (courseId) => {
 
-        console.log("Enroll button clicked:", courseId);
+        console.log(
+            "Enroll button clicked:",
+            courseId
+        );
 
         try {
-            const token = localStorage.getItem("token");
+
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/enrollments/${courseId}`,
+                `${API_URL}/api/enrollments/${courseId}`,
                 {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
-            const responseText = await response.text();
+            const responseText =
+                await response.text();
 
-            console.log("Status:", response.status);
+            console.log(
+                "Status:",
+                response.status
+            );
+
             console.log(
                 "Enrollment response:",
                 responseText
             );
 
             if (!response.ok) {
+
                 throw new Error(
                     responseText ||
                     `Enrollment failed (${response.status})`
                 );
             }
 
-            setMessage("Enrollment successful!");
+            setMessage(
+                "Enrollment successful!"
+            );
 
         } catch (error) {
 
@@ -84,30 +108,35 @@ function Courses() {
                 error
             );
 
-            setMessage(error.message);
+            setMessage(
+                error.message
+            );
         }
     };
-
 
     const handlePayment = async (courseId) => {
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/payments/create-order/${courseId}`,
+                `${API_URL}/api/payments/create-order/${courseId}`,
                 {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             if (!response.ok) {
+
                 throw new Error(
                     data.message ||
                     "Unable to create payment order"
@@ -121,88 +150,101 @@ function Courses() {
 
             const options = {
 
-                key: "rzp_test_TiWXdUBYGJUE2z",
+                key:
+                    import.meta.env
+                        .VITE_RAZORPAY_KEY_ID,
 
-                amount: data.amount,
+                amount:
+                    data.amount,
 
-                currency: data.currency,
+                currency:
+                    data.currency,
 
-                name: "E-Learning Platform",
+                name:
+                    "E-Learning Platform",
 
-                description: "Course Enrollment",
+                description:
+                    "Course Enrollment",
 
-                order_id: data.id,
+                order_id:
+                    data.id,
 
-                handler: async function (response) {
-
-                    console.log(
-                        "Payment Response:",
-                        response
-                    );
-
-                    try {
-
-                        const token =
-                            localStorage.getItem("token");
-
-                        const verifyResponse =
-                            await fetch(
-                                `http://localhost:8080/api/payments/verify/${courseId}?` +
-                                `orderId=${encodeURIComponent(
-                                    response.razorpay_order_id
-                                )}` +
-                                `&paymentId=${encodeURIComponent(
-                                    response.razorpay_payment_id
-                                )}` +
-                                `&signature=${encodeURIComponent(
-                                    response.razorpay_signature
-                                )}`,
-                                {
-                                    method: "POST",
-                                    headers: {
-                                        "Authorization":
-                                            `Bearer ${token}`
-                                    }
-                                }
-                            );
-
-                        const result =
-                            await verifyResponse.text();
+                handler:
+                    async function (response) {
 
                         console.log(
-                            "Payment Verification:",
-                            result
+                            "Payment Response:",
+                            response
                         );
 
-                        if (!verifyResponse.ok) {
-                            throw new Error(
-                                result ||
-                                "Payment verification failed"
+                        try {
+
+                            const token =
+                                localStorage.getItem(
+                                    "token"
+                                );
+
+                            const verifyResponse =
+                                await fetch(
+                                    `${API_URL}/api/payments/verify/${courseId}?` +
+                                    `orderId=${encodeURIComponent(
+                                        response.razorpay_order_id
+                                    )}` +
+                                    `&paymentId=${encodeURIComponent(
+                                        response.razorpay_payment_id
+                                    )}` +
+                                    `&signature=${encodeURIComponent(
+                                        response.razorpay_signature
+                                    )}`,
+                                    {
+                                        method: "POST",
+                                        headers: {
+                                            "Authorization":
+                                                `Bearer ${token}`
+                                        }
+                                    }
+                                );
+
+                            const result =
+                                await verifyResponse.text();
+
+                            console.log(
+                                "Payment Verification:",
+                                result
+                            );
+
+                            if (!verifyResponse.ok) {
+
+                                throw new Error(
+                                    result ||
+                                    "Payment verification failed"
+                                );
+                            }
+
+                            setMessage(
+                                "Payment successful! You are enrolled."
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "Payment verification error:",
+                                error
+                            );
+
+                            setMessage(
+                                error.message
                             );
                         }
-
-                        setMessage(
-                            "Payment successful! You are enrolled."
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "Payment verification error:",
-                            error
-                        );
-
-                        setMessage(
-                            error.message
-                        );
-                    }
-                },
+                    },
 
                 prefill: {
+
                     name:
                         localStorage.getItem(
                             "username"
                         ) || "",
+
                 },
 
                 theme: {
@@ -211,7 +253,9 @@ function Courses() {
             };
 
             const razorpay =
-                new window.Razorpay(options);
+                new window.Razorpay(
+                    options
+                );
 
             razorpay.open();
 
@@ -222,17 +266,20 @@ function Courses() {
                 error
             );
 
-            setMessage(error.message);
+            setMessage(
+                error.message
+            );
         }
     };
-
 
     if (loading) {
 
         return (
+
             <div className="courses-page">
 
                 <div className="courses-loading">
+
                     <div className="loading-icon">
                         📚
                     </div>
@@ -245,16 +292,17 @@ function Courses() {
                         Please wait while we fetch
                         available courses.
                     </p>
+
                 </div>
 
             </div>
         );
     }
 
-
     if (error) {
 
         return (
+
             <div className="courses-page">
 
                 <div className="courses-error">
@@ -264,7 +312,6 @@ function Courses() {
             </div>
         );
     }
-
 
     return (
 
@@ -297,7 +344,6 @@ function Courses() {
 
             </div>
 
-
             {/* Message */}
 
             {message && (
@@ -307,7 +353,6 @@ function Courses() {
                 </div>
 
             )}
-
 
             {/* Courses */}
 
@@ -353,16 +398,13 @@ function Courses() {
 
                             </div>
 
-
                             <h2>
                                 {course.title}
                             </h2>
 
-
                             <p className="course-description">
                                 {course.description}
                             </p>
-
 
                             <div className="course-info">
 
@@ -392,11 +434,12 @@ function Courses() {
 
                             </div>
 
-
                             <button
                                 className="pay-button"
                                 onClick={() =>
-                                    handlePayment(course.id)
+                                    handlePayment(
+                                        course.id
+                                    )
                                 }
                             >
                                 💳 Pay & Enroll

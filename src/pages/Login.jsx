@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../services/api";
 import "./Auth.css";
 
 function Login() {
@@ -16,7 +17,7 @@ function Login() {
 
         try {
             const response = await fetch(
-                "http://localhost:8080/api/auth/login",
+                `${API_URL}/api/auth/login`,
                 {
                     method: "POST",
                     headers: {

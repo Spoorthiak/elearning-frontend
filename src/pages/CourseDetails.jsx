@@ -1,59 +1,52 @@
 import { useEffect, useState } from "react";
-
 import { useParams } from "react-router-dom";
-
 import Comments from "../components/Comments";
-
+import API_URL from "../services/api";
 import "./CourseDetails.css";
-
 
 function CourseDetails() {
 
     const { courseId } = useParams();
 
     const [lessons, setLessons] = useState([]);
-
     const [loading, setLoading] = useState(true);
-
     const [error, setError] = useState("");
-
     const [completedLessons, setCompletedLessons] = useState([]);
 
     const completedCount = completedLessons.length;
 
-
     useEffect(() => {
-
         fetchLessons();
-
         fetchProgress();
-
     }, [courseId]);
 
-
     // FETCH LESSONS
-
     const fetchLessons = async () => {
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/courses/${courseId}/lessons`,
+                `${API_URL}/api/courses/${courseId}/lessons`,
                 {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
             if (!response.ok) {
-                throw new Error("Unable to fetch lessons");
+                throw new Error(
+                    "Unable to fetch lessons"
+                );
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             setLessons(data);
 
@@ -68,36 +61,48 @@ function CourseDetails() {
         }
     };
 
-
     // FETCH PROGRESS
-
     const fetchProgress = async () => {
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/progress/courses/${courseId}`,
+                `${API_URL}/api/progress/courses/${courseId}`,
                 {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
             if (!response.ok) {
-                throw new Error("Unable to fetch progress");
+                throw new Error(
+                    "Unable to fetch progress"
+                );
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
-            const completedLessonIds = data
-                .filter((progress) => progress.completed)
-                .map((progress) => progress.lessonId);
+            const completedLessonIds =
+                data
+                    .filter(
+                        (progress) =>
+                            progress.completed
+                    )
+                    .map(
+                        (progress) =>
+                            progress.lessonId
+                    );
 
-            setCompletedLessons(completedLessonIds);
+            setCompletedLessons(
+                completedLessonIds
+            );
 
         } catch (error) {
 
@@ -109,45 +114,58 @@ function CourseDetails() {
         }
     };
 
-
     // MARK LESSON COMPLETED
-
-    const markLessonCompleted = async (lessonId) => {
+    const markLessonCompleted = async (
+        lessonId
+    ) => {
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:8080/api/progress/lessons/${lessonId}/complete`,
+                `${API_URL}/api/progress/lessons/${lessonId}/complete`,
                 {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization":
+                            `Bearer ${token}`
                     }
                 }
             );
 
             if (!response.ok) {
-                throw new Error("Unable to update progress");
+                throw new Error(
+                    "Unable to update progress"
+                );
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
-            console.log("Progress:", data);
+            console.log(
+                "Progress:",
+                data
+            );
 
-            setCompletedLessons((previous) => {
+            setCompletedLessons(
+                (previous) => {
 
-                if (previous.includes(lessonId)) {
-                    return previous;
+                    if (
+                        previous.includes(
+                            lessonId
+                        )
+                    ) {
+                        return previous;
+                    }
+
+                    return [
+                        ...previous,
+                        lessonId
+                    ];
                 }
-
-                return [
-                    ...previous,
-                    lessonId
-                ];
-
-            });
+            );
 
         } catch (error) {
 
@@ -159,9 +177,7 @@ function CourseDetails() {
         }
     };
 
-
     // CONVERT YOUTUBE URL TO EMBED URL
-
     const getYouTubeEmbedUrl = (url) => {
 
         if (!url) {
@@ -170,38 +186,47 @@ function CourseDetails() {
 
         try {
 
-            const parsedUrl = new URL(url);
+            const parsedUrl =
+                new URL(url);
 
             let videoId = "";
 
             // https://www.youtube.com/watch?v=VIDEO_ID
-
             if (
-                parsedUrl.hostname.includes("youtube.com") &&
+                parsedUrl.hostname.includes(
+                    "youtube.com"
+                ) &&
                 parsedUrl.pathname === "/watch"
             ) {
 
                 videoId =
-                    parsedUrl.searchParams.get("v") || "";
+                    parsedUrl.searchParams.get(
+                        "v"
+                    ) || "";
 
             }
 
             // https://youtu.be/VIDEO_ID
-
             else if (
-                parsedUrl.hostname === "youtu.be"
+                parsedUrl.hostname ===
+                "youtu.be"
             ) {
 
                 videoId =
-                    parsedUrl.pathname.substring(1);
+                    parsedUrl.pathname.substring(
+                        1
+                    );
 
             }
 
             // https://www.youtube.com/shorts/VIDEO_ID
-
             else if (
-                parsedUrl.hostname.includes("youtube.com") &&
-                parsedUrl.pathname.startsWith("/shorts/")
+                parsedUrl.hostname.includes(
+                    "youtube.com"
+                ) &&
+                parsedUrl.pathname.startsWith(
+                    "/shorts/"
+                )
             ) {
 
                 videoId =
@@ -212,10 +237,13 @@ function CourseDetails() {
             }
 
             // https://www.youtube.com/embed/VIDEO_ID
-
             else if (
-                parsedUrl.hostname.includes("youtube.com") &&
-                parsedUrl.pathname.startsWith("/embed/")
+                parsedUrl.hostname.includes(
+                    "youtube.com"
+                ) &&
+                parsedUrl.pathname.startsWith(
+                    "/embed/"
+                )
             ) {
 
                 videoId =
@@ -230,7 +258,7 @@ function CourseDetails() {
             }
 
             /*
-             * Explicitly tell YouTube that the player
+             * Tell YouTube that the player
              * is being loaded from our React application.
              */
 
@@ -238,7 +266,7 @@ function CourseDetails() {
                 `https://www.youtube.com/embed/${videoId}` +
                 `?enablejsapi=1` +
                 `&origin=${encodeURIComponent(
-                    "http://localhost:5173"
+                    window.location.origin
                 )}`
             );
 
@@ -253,21 +281,19 @@ function CourseDetails() {
         }
     };
 
-
     const progressPercentage =
         lessons.length === 0
             ? 0
             : Math.round(
-                (completedCount / lessons.length) * 100
+                (completedCount /
+                    lessons.length) *
+                100
             );
 
-
     // LOADING
-
     if (loading) {
 
         return (
-
             <div className="course-details-page">
 
                 <div className="course-details-loading">
@@ -287,18 +313,13 @@ function CourseDetails() {
                 </div>
 
             </div>
-
         );
-
     }
 
-
     // ERROR
-
     if (error) {
 
         return (
-
             <div className="course-details-page">
 
                 <div className="course-details-error">
@@ -306,16 +327,12 @@ function CourseDetails() {
                 </div>
 
             </div>
-
         );
-
     }
-
 
     return (
 
         <div className="course-details-page">
-
 
             {/* COURSE HEADER */}
 
@@ -344,7 +361,6 @@ function CourseDetails() {
 
             </section>
 
-
             {/* PROGRESS SECTION */}
 
             <section className="progress-card">
@@ -369,25 +385,25 @@ function CourseDetails() {
 
                 </div>
 
-
                 <div className="progress-bar-background">
 
                     <div
                         className="progress-bar-fill"
                         style={{
-                            width: `${progressPercentage}%`
+                            width:
+                                `${progressPercentage}%`
                         }}
                     />
 
                 </div>
 
-
                 <p>
-                    {completedCount} of {lessons.length} lessons completed
+                    {completedCount} of {lessons.length}
+                    {" "}
+                    lessons completed
                 </p>
 
             </section>
-
 
             {/* LESSONS */}
 
@@ -411,7 +427,6 @@ function CourseDetails() {
                 </span>
 
             </div>
-
 
             {lessons.length === 0 ? (
 
@@ -448,18 +463,18 @@ function CourseDetails() {
                                 lesson.videoUrl
                             );
 
-
                         return (
 
                             <div
-                                className={`lesson-item ${
-                                    isCompleted
-                                        ? "lesson-completed"
-                                        : ""
-                                }`}
+                                className={
+                                    `lesson-item ${
+                                        isCompleted
+                                            ? "lesson-completed"
+                                            : ""
+                                    }`
+                                }
                                 key={lesson.id}
                             >
-
 
                                 {/* LESSON NUMBER */}
 
@@ -470,7 +485,6 @@ function CourseDetails() {
                                         : lesson.lessonOrder}
 
                                 </div>
-
 
                                 {/* LESSON CONTENT */}
 
@@ -484,7 +498,6 @@ function CourseDetails() {
                                         {lesson.content}
                                     </p>
 
-
                                     {/* VIDEO */}
 
                                     {lesson.videoUrl &&
@@ -495,8 +508,12 @@ function CourseDetails() {
                                             <iframe
                                                 width="100%"
                                                 height="400"
-                                                src={videoEmbedUrl}
-                                                title={lesson.title}
+                                                src={
+                                                    videoEmbedUrl
+                                                }
+                                                title={
+                                                    lesson.title
+                                                }
                                                 frameBorder="0"
                                                 referrerPolicy="strict-origin-when-cross-origin"
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -526,7 +543,6 @@ function CourseDetails() {
 
                                 </div>
 
-
                                 {/* LESSON ACTION */}
 
                                 <div className="lesson-action">
@@ -554,17 +570,14 @@ function CourseDetails() {
 
                                 </div>
 
-
                             </div>
 
                         );
-
                     })}
 
                 </div>
 
             )}
-
 
             {/* COMMENTS */}
 
@@ -589,12 +602,8 @@ function CourseDetails() {
 
             </section>
 
-
         </div>
-
     );
-
 }
-
 
 export default CourseDetails;
