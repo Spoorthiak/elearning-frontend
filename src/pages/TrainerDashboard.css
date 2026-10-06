@@ -1,0 +1,603 @@
+/* =========================
+   TRAINER DASHBOARD
+========================= */
+
+.trainer-dashboard {
+    width: 90%;
+    max-width: 1150px;
+    margin: 40px auto;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.trainer-header {
+    min-height: 200px;
+    padding: 35px 40px;
+
+    border-radius: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #f97316,
+        #c2410c
+    );
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow:
+        0 10px 25px rgba(194, 65, 12, 0.2);
+}
+
+.trainer-header h1 {
+    font-size: 32px;
+    margin: 8px 0 10px;
+}
+
+.trainer-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.trainer-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.trainer-header-icon {
+    width: 85px;
+    height: 85px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 40px;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.trainer-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    margin: 30px 0;
+}
+
+.trainer-action-btn {
+    border: none;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.create-course-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.create-course-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.my-courses-btn {
+    background: #16a34a;
+    color: white;
+}
+
+.my-courses-btn:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   FORMS
+========================= */
+
+.trainer-form-card {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    margin: 25px 0;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.07);
+}
+
+.trainer-form-card h2 {
+    color: #1e293b;
+
+    margin-bottom: 20px;
+}
+
+.trainer-form-group {
+    margin-bottom: 18px;
+}
+
+.trainer-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-weight: 600;
+
+    font-size: 14px;
+}
+
+.trainer-form-group input,
+.trainer-form-group textarea {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.trainer-form-group textarea {
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+.trainer-form-group input:focus,
+.trainer-form-group textarea:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-buttons {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.form-submit-btn,
+.form-cancel-btn {
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.form-submit-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.form-submit-btn:hover {
+    background: #1d4ed8;
+}
+
+.form-cancel-btn {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.form-cancel-btn:hover {
+    background: #cbd5e1;
+}
+
+
+/* =========================
+   MY COURSES
+========================= */
+
+.my-courses-section {
+    margin-top: 35px;
+}
+
+.my-courses-section > h2 {
+    color: #1e293b;
+
+    margin-bottom: 20px;
+}
+
+.trainer-course-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 25px;
+}
+
+.trainer-course-card {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.07);
+
+    transition: 0.2s;
+}
+
+.trainer-course-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 9px 23px rgba(0, 0, 0, 0.1);
+}
+
+.trainer-course-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+}
+
+.trainer-course-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 11px;
+
+    background: #fff7ed;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+.trainer-course-card h3 {
+    color: #1e293b;
+
+    font-size: 20px;
+
+    margin: 18px 0 10px;
+}
+
+.trainer-course-card > p {
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+.course-meta {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 15px 0;
+
+    margin: 18px 0;
+
+    border-top: 1px solid #e2e8f0;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.course-price {
+    color: #16a34a;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+.visibility-badge {
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.visible-badge {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.hidden-badge {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* =========================
+   COURSE BUTTONS
+========================= */
+
+.course-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.course-action-btn {
+    border: none;
+
+    padding: 9px 12px;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.edit-course-btn {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.add-lesson-btn {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.edit-course-btn:hover {
+    background: #bfdbfe;
+}
+
+.add-lesson-btn:hover {
+    background: #bbf7d0;
+}
+
+
+/* =========================
+   LESSONS
+========================= */
+
+.lessons-section {
+    margin-top: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e2e8f0;
+}
+
+.lessons-section h4 {
+    color: #475569;
+
+    margin-bottom: 12px;
+}
+
+.lesson-row {
+    background: #f8fafc;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    margin-bottom: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.lesson-row p {
+    margin: 0;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.lesson-actions {
+    display: flex;
+
+    gap: 6px;
+}
+
+.edit-lesson-btn,
+.delete-lesson-btn {
+    border: none;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.edit-lesson-btn {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+}
+
+.delete-lesson-btn {
+    background: #fee2e2;
+
+    color: #b91c1c;
+}
+
+.edit-lesson-btn:hover {
+    background: #bfdbfe;
+}
+
+.delete-lesson-btn:hover {
+    background: #fecaca;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.no-courses {
+    background: white;
+
+    padding: 45px;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+
+    .trainer-dashboard {
+        width: 94%;
+
+        margin: 25px auto;
+    }
+
+    .trainer-header {
+        padding: 28px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+    .trainer-header h1 {
+        font-size: 27px;
+    }
+
+    .trainer-header-icon {
+        width: 65px;
+        height: 65px;
+
+        font-size: 30px;
+    }
+
+    .trainer-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .trainer-course-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .lesson-actions {
+        width: 100%;
+    }
+
+    .edit-lesson-btn,
+    .delete-lesson-btn {
+        flex: 1;
+    }
+}
+
+.visibility-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.visibility-checkbox label {
+    margin-bottom: 0;
+}
+
+.visibility-checkbox input {
+    width: auto;
+}
+
+.visibility-checkbox span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.selected-course-text {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.empty-course-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.no-courses h3 {
+    color: #334155;
+    margin-bottom: 7px;
+}

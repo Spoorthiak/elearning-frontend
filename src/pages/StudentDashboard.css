@@ -1,0 +1,271 @@
+.student-dashboard {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+
+/* =========================
+   WELCOME SECTION
+========================= */
+
+.student-welcome {
+    min-height: 220px;
+
+    padding: 40px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1e40af
+        );
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.2);
+}
+
+
+.welcome-label {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    font-size: 14px;
+
+    opacity: 0.9;
+}
+
+
+.student-welcome h1 {
+    font-size: 34px;
+
+    margin-bottom: 12px;
+}
+
+
+.student-welcome p {
+    font-size: 16px;
+
+    opacity: 0.9;
+
+    max-width: 550px;
+
+    line-height: 1.6;
+}
+
+
+.welcome-icon {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    font-size: 48px;
+}
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.student-section-title {
+    margin: 35px 0 20px;
+
+    color: #1e293b;
+
+    font-size: 24px;
+}
+
+
+/* =========================
+   ACTION CARDS
+========================= */
+
+.student-action-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 25px;
+}
+
+
+.student-action-card {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.07);
+
+    transition: 0.25s;
+}
+
+
+.student-action-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =========================
+   ACTION ICON
+========================= */
+
+.action-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    font-size: 28px;
+
+    margin-bottom: 20px;
+}
+
+
+.blue-icon {
+    background: #dbeafe;
+}
+
+
+.green-icon {
+    background: #dcfce7;
+}
+
+
+/* =========================
+   CARD TEXT
+========================= */
+
+.student-action-card h2 {
+    color: #1e293b;
+
+    font-size: 21px;
+
+    margin-bottom: 10px;
+}
+
+
+.student-action-card p {
+    color: #64748b;
+
+    line-height: 1.6;
+
+    min-height: 52px;
+
+    margin-bottom: 22px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.student-action-btn {
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.blue-btn {
+    background: #2563eb;
+}
+
+
+.blue-btn:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+.green-btn {
+    background: #16a34a;
+}
+
+
+.green-btn:hover {
+    background: #15803d;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .student-dashboard {
+        width: 94%;
+        margin: 25px auto;
+    }
+
+    .student-welcome {
+        padding: 28px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+    .student-welcome h1 {
+        font-size: 28px;
+    }
+
+    .welcome-icon {
+        width: 70px;
+        height: 70px;
+
+        font-size: 34px;
+    }
+
+    .student-action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-action-card {
+        padding: 25px;
+    }
+}
